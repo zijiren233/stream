@@ -6,7 +6,7 @@ func (w *Writer) U8(s uint8) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = s
+	PutU8(buf[:1], s)
 	n, err := w.w.Write(buf[:1])
 	if err != nil {
 		w.err = err
@@ -21,8 +21,7 @@ func (w *Writer) U16BE(s uint16) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 8)
-	buf[1] = byte(s)
+	PutU16BE(buf[:2], s)
 	n, err := w.w.Write(buf[:2])
 	if err != nil {
 		w.err = err
@@ -37,8 +36,7 @@ func (w *Writer) U16LE(s uint16) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
+	PutU16LE(buf[:2], s)
 	n, err := w.w.Write(buf[:2])
 	if err != nil {
 		w.err = err
@@ -53,9 +51,7 @@ func (w *Writer) U24BE(s uint32) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 16)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s)
+	PutU24BE(buf[:3], s)
 	n, err := w.w.Write(buf[:3])
 	if err != nil {
 		w.err = err
@@ -70,9 +66,7 @@ func (w *Writer) U24LE(s uint32) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
+	PutU24LE(buf[:3], s)
 	n, err := w.w.Write(buf[:3])
 	if err != nil {
 		w.err = err
@@ -87,10 +81,7 @@ func (w *Writer) U32BE(s uint32) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 24)
-	buf[1] = byte(s >> 16)
-	buf[2] = byte(s >> 8)
-	buf[3] = byte(s)
+	PutU32BE(buf[:4], s)
 	n, err := w.w.Write(buf[:4])
 	if err != nil {
 		w.err = err
@@ -105,10 +96,7 @@ func (w *Writer) U32LE(s uint32) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 24)
+	PutU32LE(buf[:4], s)
 	n, err := w.w.Write(buf[:4])
 	if err != nil {
 		w.err = err
@@ -123,11 +111,7 @@ func (w *Writer) U40BE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 32)
-	buf[1] = byte(s >> 24)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 8)
-	buf[4] = byte(s)
+	PutU40BE(buf[:5], s)
 	n, err := w.w.Write(buf[:5])
 	if err != nil {
 		w.err = err
@@ -142,11 +126,7 @@ func (w *Writer) U40LE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 24)
-	buf[4] = byte(s >> 32)
+	PutU40LE(buf[:5], s)
 	n, err := w.w.Write(buf[:5])
 	if err != nil {
 		w.err = err
@@ -161,12 +141,7 @@ func (w *Writer) U48BE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 40)
-	buf[1] = byte(s >> 32)
-	buf[2] = byte(s >> 24)
-	buf[3] = byte(s >> 16)
-	buf[4] = byte(s >> 8)
-	buf[5] = byte(s)
+	PutU48BE(buf[:6], s)
 	n, err := w.w.Write(buf[:6])
 	if err != nil {
 		w.err = err
@@ -181,12 +156,7 @@ func (w *Writer) U48LE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 24)
-	buf[4] = byte(s >> 32)
-	buf[5] = byte(s >> 40)
+	PutU48LE(buf[:6], s)
 	n, err := w.w.Write(buf[:6])
 	if err != nil {
 		w.err = err
@@ -201,13 +171,7 @@ func (w *Writer) U56BE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 48)
-	buf[1] = byte(s >> 40)
-	buf[2] = byte(s >> 32)
-	buf[3] = byte(s >> 24)
-	buf[4] = byte(s >> 16)
-	buf[5] = byte(s >> 8)
-	buf[6] = byte(s)
+	PutU56BE(buf[:7], s)
 	n, err := w.w.Write(buf[:7])
 	if err != nil {
 		w.err = err
@@ -222,13 +186,7 @@ func (w *Writer) U56LE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 24)
-	buf[4] = byte(s >> 32)
-	buf[5] = byte(s >> 40)
-	buf[6] = byte(s >> 48)
+	PutU56LE(buf[:7], s)
 	n, err := w.w.Write(buf[:7])
 	if err != nil {
 		w.err = err
@@ -243,14 +201,7 @@ func (w *Writer) U64BE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s >> 56)
-	buf[1] = byte(s >> 48)
-	buf[2] = byte(s >> 40)
-	buf[3] = byte(s >> 32)
-	buf[4] = byte(s >> 24)
-	buf[5] = byte(s >> 16)
-	buf[6] = byte(s >> 8)
-	buf[7] = byte(s)
+	PutU64BE(buf[:8], s)
 	n, err := w.w.Write(buf)
 	if err != nil {
 		w.err = err
@@ -265,14 +216,7 @@ func (w *Writer) U64LE(s uint64) *Writer {
 	}
 	buf := *bufPool.Get().(*[]byte)
 	defer bufPool.Put(&buf)
-	buf[0] = byte(s)
-	buf[1] = byte(s >> 8)
-	buf[2] = byte(s >> 16)
-	buf[3] = byte(s >> 24)
-	buf[4] = byte(s >> 32)
-	buf[5] = byte(s >> 40)
-	buf[6] = byte(s >> 48)
-	buf[7] = byte(s >> 56)
+	PutU64LE(buf[:8], s)
 	n, err := w.w.Write(buf)
 	if err != nil {
 		w.err = err

@@ -15,7 +15,7 @@ func (r *Reader) U8(t *uint8) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = buf[0]
+		*t = U8(buf[0])
 	}
 	r.n = n
 	return r
@@ -43,7 +43,7 @@ func (r *Reader) U16BE(t *uint16) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint16(buf[0])<<8 | uint16(buf[1])
+		*t = U16BE(buf[:2])
 	}
 	r.n = n
 	return r
@@ -71,7 +71,7 @@ func (r *Reader) U16LE(t *uint16) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint16(buf[1])<<8 | uint16(buf[0])
+		*t = U16LE(buf[:2])
 	}
 	r.n = n
 	return r
@@ -99,7 +99,7 @@ func (r *Reader) U24BE(t *uint32) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint32(buf[0])<<16 | uint32(buf[1])<<8 | uint32(buf[2])
+		*t = U24BE(buf[:3])
 	}
 	r.n = n
 	return r
@@ -127,7 +127,7 @@ func (r *Reader) U24LE(t *uint32) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint32(buf[2])<<16 | uint32(buf[1])<<8 | uint32(buf[0])
+		*t = U24LE(buf[:3])
 	}
 	r.n = n
 	return r
@@ -155,7 +155,7 @@ func (r *Reader) U32BE(t *uint32) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint32(buf[0])<<24 | uint32(buf[1])<<16 | uint32(buf[2])<<8 | uint32(buf[3])
+		*t = U32BE(buf[:4])
 	}
 	r.n = n
 	return r
@@ -183,7 +183,7 @@ func (r *Reader) U32LE(t *uint32) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint32(buf[3])<<24 | uint32(buf[2])<<16 | uint32(buf[1])<<8 | uint32(buf[0])
+		*t = U32LE(buf[:4])
 	}
 	r.n = n
 	return r
@@ -211,7 +211,7 @@ func (r *Reader) U40BE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[0])<<32 | uint64(buf[1])<<24 | uint64(buf[2])<<16 | uint64(buf[3])<<8 | uint64(buf[4])
+		*t = U40BE(buf[:5])
 	}
 	r.n = n
 	return r
@@ -239,7 +239,7 @@ func (r *Reader) U40LE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[4])<<32 | uint64(buf[3])<<24 | uint64(buf[2])<<16 | uint64(buf[1])<<8 | uint64(buf[0])
+		*t = U40LE(buf[:5])
 	}
 	r.n = n
 	return r
@@ -267,7 +267,7 @@ func (r *Reader) U48BE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[0])<<40 | uint64(buf[1])<<32 | uint64(buf[2])<<24 | uint64(buf[3])<<16 | uint64(buf[4])<<8 | uint64(buf[5])
+		*t = U48BE(buf[:6])
 	}
 	r.n = n
 	return r
@@ -295,7 +295,7 @@ func (r *Reader) U48LE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[5])<<40 | uint64(buf[4])<<32 | uint64(buf[3])<<24 | uint64(buf[2])<<16 | uint64(buf[1])<<8 | uint64(buf[0])
+		*t = U48LE(buf[:6])
 	}
 	r.n = n
 	return r
@@ -323,7 +323,7 @@ func (r *Reader) U56BE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[0])<<48 | uint64(buf[1])<<40 | uint64(buf[2])<<32 | uint64(buf[3])<<24 | uint64(buf[4])<<16 | uint64(buf[5])<<8 | uint64(buf[6])
+		*t = U56BE(buf[:7])
 	}
 	r.n = n
 	return r
@@ -351,7 +351,7 @@ func (r *Reader) U56LE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[6])<<48 | uint64(buf[5])<<40 | uint64(buf[4])<<32 | uint64(buf[3])<<24 | uint64(buf[2])<<16 | uint64(buf[1])<<8 | uint64(buf[0])
+		*t = U56LE(buf[:7])
 	}
 	r.n = n
 	return r
@@ -379,7 +379,7 @@ func (r *Reader) U64BE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[0])<<56 | uint64(buf[1])<<48 | uint64(buf[2])<<40 | uint64(buf[3])<<32 | uint64(buf[4])<<24 | uint64(buf[5])<<16 | uint64(buf[6])<<8 | uint64(buf[7])
+		*t = U64BE(buf)
 	}
 	r.n = n
 	return r
@@ -407,7 +407,7 @@ func (r *Reader) U64LE(t *uint64) *Reader {
 	if err != nil {
 		r.err = err
 	} else {
-		*t = uint64(buf[7])<<56 | uint64(buf[6])<<48 | uint64(buf[5])<<40 | uint64(buf[4])<<32 | uint64(buf[3])<<24 | uint64(buf[2])<<16 | uint64(buf[1])<<8 | uint64(buf[0])
+		*t = U64LE(buf)
 	}
 	r.n = n
 	return r

@@ -1,19 +1,42 @@
 package stream
 
 import (
+	"bufio"
 	"io"
+
+	"github.com/zijiren233/stream/pool"
 )
 
 type Reader struct {
 	r   io.Reader
 	n   int
 	err error
+
+	bufferSize int
 }
 
-func NewReader(r io.Reader) *Reader {
-	return &Reader{
-		r: r,
+type ReaderConf func(*Reader)
+
+func WithBufferSize(size int) ReaderConf {
+	return func(r *Reader) {
+		r.bufferSize = size
 	}
+}
+
+func NewReader(r io.Reader, conf ...ReaderConf) *Reader {
+	reader := new(Reader)
+
+	for _, c := range conf {
+		c(reader)
+	}
+
+	if reader.bufferSize != 0 {
+		reader.r = bufio.NewReaderSize(r, reader.bufferSize)
+	} else {
+		reader.r = r
+	}
+
+	return reader
 }
 
 func (r *Reader) Error() error {
@@ -38,8 +61,8 @@ func (r *Reader) Byte(t *byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
+	buf := *pool.BufPool.Get().(*[]byte)
+	defer pool.BufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:1])
 	if err != nil {
 		r.err = err
@@ -57,8 +80,8 @@ func (r *Reader) Bytes(t []byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
+	buf := *pool.BufPool.Get().(*[]byte)
+	defer pool.BufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, t)
 	if err != nil {
 		r.err = err

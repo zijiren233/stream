@@ -1,8 +1,8 @@
-package pool
+package stream
 
 import "sync"
 
-var BufPool = &sync.Pool{
+var bufPool = &sync.Pool{
 	New: func() interface{} {
 		buf := make([]byte, 8)
 		return &buf

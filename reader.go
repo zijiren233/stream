@@ -3,8 +3,6 @@ package stream
 import (
 	"bufio"
 	"io"
-
-	"github.com/zijiren233/stream/pool"
 )
 
 type Reader struct {
@@ -17,7 +15,7 @@ type Reader struct {
 
 type ReaderConf func(*Reader)
 
-func WithBufferSize(size int) ReaderConf {
+func WithReaderBufferSize(size int) ReaderConf {
 	return func(r *Reader) {
 		r.bufferSize = size
 	}
@@ -61,8 +59,8 @@ func (r *Reader) Byte(t *byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:1])
 	if err != nil {
 		r.err = err
@@ -80,8 +78,8 @@ func (r *Reader) Bytes(t []byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, t)
 	if err != nil {
 		r.err = err

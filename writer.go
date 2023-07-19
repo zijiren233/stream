@@ -3,8 +3,6 @@ package stream
 import (
 	"bufio"
 	"io"
-
-	"github.com/zijiren233/stream/pool"
 )
 
 type Writer struct {
@@ -17,7 +15,7 @@ type Writer struct {
 
 type WriterConf func(*Writer)
 
-func WithBufferSize(size int) WriterConf {
+func WithWriterBufferSize(size int) WriterConf {
 	return func(w *Writer) {
 		w.bufferSize = size
 	}
@@ -68,8 +66,8 @@ func (w *Writer) Byte(s byte) *Writer {
 	if w.err != nil {
 		return w
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := w.w.Write([]byte{s})
 	if err != nil {
 		w.err = err
@@ -82,8 +80,8 @@ func (w *Writer) Bytes(s []byte) *Writer {
 	if w.err != nil {
 		return w
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := w.w.Write(s)
 	if err != nil {
 		w.err = err

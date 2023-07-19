@@ -2,8 +2,6 @@ package stream
 
 import (
 	"io"
-
-	"github.com/zijiren233/stream/pool"
 )
 
 // The error is EOF only if no bytes were read.
@@ -13,8 +11,8 @@ func (r *Reader) I8(t *int8) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:1])
 	if err != nil {
 		r.err = err
@@ -42,8 +40,8 @@ func (r *Reader) I16BE(t *int16) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:2])
 	if err != nil {
 		r.err = err
@@ -71,8 +69,8 @@ func (r *Reader) I16LE(t *int16) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:2])
 	if err != nil {
 		r.err = err
@@ -100,8 +98,8 @@ func (r *Reader) I24BE(t *int32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:3])
 	if err != nil {
 		r.err = err
@@ -129,8 +127,8 @@ func (r *Reader) I24LE(t *int32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:3])
 	if err != nil {
 		r.err = err
@@ -158,8 +156,8 @@ func (r *Reader) I32BE(t *int32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:4])
 	if err != nil {
 		r.err = err
@@ -187,8 +185,8 @@ func (r *Reader) I32LE(t *int32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:4])
 	if err != nil {
 		r.err = err
@@ -216,8 +214,8 @@ func (r *Reader) I40BE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:5])
 	if err != nil {
 		r.err = err
@@ -245,8 +243,8 @@ func (r *Reader) I40LE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:5])
 	if err != nil {
 		r.err = err
@@ -274,8 +272,8 @@ func (r *Reader) I48BE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:6])
 	if err != nil {
 		r.err = err
@@ -303,8 +301,8 @@ func (r *Reader) I48LE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:6])
 	if err != nil {
 		r.err = err
@@ -332,8 +330,8 @@ func (r *Reader) I56BE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:7])
 	if err != nil {
 		r.err = err
@@ -361,8 +359,8 @@ func (r *Reader) I56LE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf[:7])
 	if err != nil {
 		r.err = err
@@ -390,8 +388,8 @@ func (r *Reader) I64BE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf)
 	if err != nil {
 		r.err = err
@@ -419,8 +417,8 @@ func (r *Reader) I64LE(t *int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *pool.BufPool.Get().(*[]byte)
-	defer pool.BufPool.Put(&buf)
+	buf := *bufPool.Get().(*[]byte)
+	defer bufPool.Put(&buf)
 	n, err := io.ReadFull(r.r, buf)
 	if err != nil {
 		r.err = err

@@ -10,14 +10,15 @@ type Reader struct {
 	n   int
 	err error
 
-	bufferSize int
+	buffered bool
+	closed   bool
 }
 
 type ReaderConf func(*Reader)
 
-func WithReaderBufferSize(size int) ReaderConf {
+func WithReaderBuffer(buffered bool) ReaderConf {
 	return func(r *Reader) {
-		r.bufferSize = size
+		r.buffered = buffered
 	}
 }
 
@@ -28,8 +29,10 @@ func NewReader(r io.Reader, conf ...ReaderConf) *Reader {
 		c(reader)
 	}
 
-	if reader.bufferSize != 0 {
-		reader.r = bufio.NewReaderSize(r, reader.bufferSize)
+	if reader.buffered {
+		buf := bufReaderPool.Get().(*bufio.Reader)
+		buf.Reset(r)
+		reader.r = buf
 	} else {
 		reader.r = r
 	}
@@ -52,6 +55,19 @@ func (r *Reader) Reset() {
 	r.err = nil
 }
 
+func (r *Reader) Close() error {
+	if r.closed {
+		return ErrAlreadyClosed
+	}
+	r.closed = true
+	if r.buffered {
+		bufReaderPool.Put(r.r.(*bufio.Reader))
+	}
+	r.r = nil
+
+	return nil
+}
+
 // The error is EOF only if no bytes were read.
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
@@ -59,15 +75,17 @@ func (r *Reader) Byte(t *byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
-	n, err := io.ReadFull(r.r, buf[:1])
-	if err != nil {
-		r.err = err
-	} else {
+	if r.closed {
+		r.err = ErrAlreadyClosed
+		return r
+	}
+	buf := *bufBytesPool.Get().(*[]byte)
+	defer bufBytesPool.Put(&buf)
+	r.n, r.err = io.ReadFull(r.r, buf[:1])
+	if r.err == nil {
 		*t = buf[0]
 	}
-	r.n = n
+
 	return r
 }
 
@@ -78,12 +96,13 @@ func (r *Reader) Bytes(t []byte) *Reader {
 	if r.err != nil {
 		return r
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
-	n, err := io.ReadFull(r.r, t)
-	if err != nil {
-		r.err = err
+	if r.closed {
+		r.err = ErrAlreadyClosed
+		return r
 	}
-	r.n = n
+	buf := *bufBytesPool.Get().(*[]byte)
+	defer bufBytesPool.Put(&buf)
+	r.n, r.err = io.ReadFull(r.r, t)
+
 	return r
 }

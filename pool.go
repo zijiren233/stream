@@ -1,10 +1,25 @@
 package stream
 
-import "sync"
+import (
+	"bufio"
+	"sync"
+)
 
-var bufPool = &sync.Pool{
+var bufBytesPool = &sync.Pool{
 	New: func() interface{} {
 		buf := make([]byte, 8)
 		return &buf
+	},
+}
+
+var bufReaderPool = &sync.Pool{
+	New: func() interface{} {
+		return bufio.NewReader(nil)
+	},
+}
+
+var bufWriterPool = &sync.Pool{
+	New: func() interface{} {
+		return bufio.NewWriter(nil)
 	},
 }

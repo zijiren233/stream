@@ -10,14 +10,15 @@ type Writer struct {
 	n   int
 	err error
 
-	bufferSize int
+	buffered bool
+	closed   bool
 }
 
 type WriterConf func(*Writer)
 
-func WithWriterBufferSize(size int) WriterConf {
+func WithWriterBuffer(buffered bool) WriterConf {
 	return func(w *Writer) {
-		w.bufferSize = size
+		w.buffered = buffered
 	}
 }
 
@@ -28,8 +29,10 @@ func NewWriter(w io.Writer, conf ...WriterConf) *Writer {
 		c(writer)
 	}
 
-	if writer.bufferSize != 0 {
-		writer.w = bufio.NewWriterSize(w, writer.bufferSize)
+	if writer.buffered {
+		buf := bufWriterPool.Get().(*bufio.Writer)
+		buf.Reset(w)
+		writer.w = buf
 	} else {
 		writer.w = w
 	}
@@ -41,7 +44,7 @@ func (w *Writer) Flush() *Writer {
 	if w.err != nil {
 		return w
 	}
-	if w.bufferSize != 0 {
+	if w.buffered {
 		w.err = w.w.(*bufio.Writer).Flush()
 	}
 	return w
@@ -57,22 +60,38 @@ func (w *Writer) N() int {
 	return w.n
 }
 
-func (w *Writer) Reset() {
+func (w *Writer) Reset() *Writer {
 	w.n = 0
 	w.err = nil
+	return w
+}
+
+func (w *Writer) Close() *Writer {
+	if w.closed {
+		return nil
+	}
+	w.closed = true
+	if w.buffered {
+		writer := w.w.(*bufio.Writer)
+		w.err = writer.Flush()
+		bufWriterPool.Put(writer)
+	}
+	w.w = nil
+	return w
 }
 
 func (w *Writer) Byte(s byte) *Writer {
 	if w.err != nil {
 		return w
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
-	n, err := w.w.Write([]byte{s})
-	if err != nil {
-		w.err = err
+	if w.closed {
+		w.err = ErrAlreadyClosed
+		return w
 	}
-	w.n = n
+	buf := *bufBytesPool.Get().(*[]byte)
+	defer bufBytesPool.Put(&buf)
+	w.n, w.err = w.w.Write([]byte{s})
+
 	return w
 }
 
@@ -80,12 +99,13 @@ func (w *Writer) Bytes(s []byte) *Writer {
 	if w.err != nil {
 		return w
 	}
-	buf := *bufPool.Get().(*[]byte)
-	defer bufPool.Put(&buf)
-	n, err := w.w.Write(s)
-	if err != nil {
-		w.err = err
+	if w.closed {
+		w.err = ErrAlreadyClosed
+		return w
 	}
-	w.n = n
+	buf := *bufBytesPool.Get().(*[]byte)
+	defer bufBytesPool.Put(&buf)
+	w.n, w.err = w.w.Write(s)
+
 	return w
 }

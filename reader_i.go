@@ -30,8 +30,8 @@ func (r *Reader) I8(t *int8) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI8() (t int8, err error) {
-	err = r.I8(&t).Error()
-	r.Reset()
+	err = r.I8(&t).err
+	r.err = nil
 
 	return
 }
@@ -62,8 +62,8 @@ func (r *Reader) I16BE(t *int16) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI16BE() (t int16, err error) {
-	err = r.I16BE(&t).Error()
-	r.Reset()
+	err = r.I16BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -94,8 +94,8 @@ func (r *Reader) I16LE(t *int16) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI16LE() (t int16, err error) {
-	err = r.I16LE(&t).Error()
-	r.Reset()
+	err = r.I16LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -126,8 +126,8 @@ func (r *Reader) I24BE(t *int32) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI24BE() (t int32, err error) {
-	err = r.I24BE(&t).Error()
-	r.Reset()
+	err = r.I24BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -158,8 +158,8 @@ func (r *Reader) I24LE(t *int32) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI24LE() (t int32, err error) {
-	err = r.I24LE(&t).Error()
-	r.Reset()
+	err = r.I24LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -190,8 +190,8 @@ func (r *Reader) I32BE(t *int32) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI32BE() (t int32, err error) {
-	err = r.I32BE(&t).Error()
-	r.Reset()
+	err = r.I32BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -222,8 +222,8 @@ func (r *Reader) I32LE(t *int32) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI32LE() (t int32, err error) {
-	err = r.I32LE(&t).Error()
-	r.Reset()
+	err = r.I32LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -254,8 +254,8 @@ func (r *Reader) I40BE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI40BE() (t int64, err error) {
-	err = r.I40BE(&t).Error()
-	r.Reset()
+	err = r.I40BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -286,8 +286,8 @@ func (r *Reader) I40LE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI40LE() (t int64, err error) {
-	err = r.I40LE(&t).Error()
-	r.Reset()
+	err = r.I40LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -318,8 +318,8 @@ func (r *Reader) I48BE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI48BE() (t int64, err error) {
-	err = r.I48BE(&t).Error()
-	r.Reset()
+	err = r.I48BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -350,8 +350,8 @@ func (r *Reader) I48LE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI48LE() (t int64, err error) {
-	err = r.I48LE(&t).Error()
-	r.Reset()
+	err = r.I48LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -382,8 +382,8 @@ func (r *Reader) I56BE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI56BE() (t int64, err error) {
-	err = r.I56BE(&t).Error()
-	r.Reset()
+	err = r.I56BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -414,8 +414,8 @@ func (r *Reader) I56LE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI56LE() (t int64, err error) {
-	err = r.I56LE(&t).Error()
-	r.Reset()
+	err = r.I56LE(&t).err
+	r.err = nil
 
 	return
 }
@@ -446,8 +446,8 @@ func (r *Reader) I64BE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI64BE() (t int64, err error) {
-	err = r.I64BE(&t).Error()
-	r.Reset()
+	err = r.I64BE(&t).err
+	r.err = nil
 
 	return
 }
@@ -478,8 +478,8 @@ func (r *Reader) I64LE(t *int64) *Reader {
 // If an EOF happens after reading some but not all the bytes,
 // Will returns ErrUnexpectedEOF.
 func (r *Reader) GetI64LE() (t int64, err error) {
-	err = r.I64LE(&t).Error()
-	r.Reset()
+	err = r.I64LE(&t).err
+	r.err = nil
 
 	return
 }

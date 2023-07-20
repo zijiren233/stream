@@ -6,9 +6,10 @@ import (
 )
 
 type Reader struct {
-	r   io.Reader
-	n   int
-	err error
+	r     io.Reader
+	n     int
+	total int
+	err   error
 
 	buffered bool
 	closed   bool
@@ -50,8 +51,13 @@ func (r *Reader) N() int {
 	return r.n
 }
 
+func (r *Reader) Total() int {
+	return r.total
+}
+
 func (r *Reader) Reset() {
 	r.n = 0
+	r.total = 0
 	r.err = nil
 }
 
@@ -85,6 +91,7 @@ func (r *Reader) Byte(t *byte) *Reader {
 	if r.err == nil {
 		*t = buf[0]
 	}
+	r.total += r.n
 
 	return r
 }
@@ -103,6 +110,7 @@ func (r *Reader) Bytes(t []byte) *Reader {
 	buf := *bufBytesPool.Get().(*[]byte)
 	defer bufBytesPool.Put(&buf)
 	r.n, r.err = io.ReadFull(r.r, t)
+	r.total += r.n
 
 	return r
 }

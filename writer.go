@@ -6,9 +6,10 @@ import (
 )
 
 type Writer struct {
-	w   io.Writer
-	n   int
-	err error
+	w     io.Writer
+	n     int
+	total int
+	err   error
 
 	buffered bool
 	closed   bool
@@ -60,8 +61,13 @@ func (w *Writer) N() int {
 	return w.n
 }
 
+func (w *Writer) Total() int {
+	return w.total
+}
+
 func (w *Writer) Reset() *Writer {
 	w.n = 0
+	w.total = 0
 	w.err = nil
 	return w
 }
@@ -91,6 +97,7 @@ func (w *Writer) Byte(s byte) *Writer {
 	buf := *bufBytesPool.Get().(*[]byte)
 	defer bufBytesPool.Put(&buf)
 	w.n, w.err = w.w.Write([]byte{s})
+	w.total += w.n
 
 	return w
 }
@@ -106,6 +113,7 @@ func (w *Writer) Bytes(s []byte) *Writer {
 	buf := *bufBytesPool.Get().(*[]byte)
 	defer bufBytesPool.Put(&buf)
 	w.n, w.err = w.w.Write(s)
+	w.total += w.n
 
 	return w
 }

@@ -21,6 +21,7 @@ func (r *Reader) U8(t *uint8) *Reader {
 	if r.err == nil {
 		*t = U8(buf[0])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -52,6 +53,7 @@ func (r *Reader) U16BE(t *uint16) *Reader {
 	if r.err == nil {
 		*t = U16BE(buf[:2])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -83,6 +85,7 @@ func (r *Reader) U16LE(t *uint16) *Reader {
 	if r.err == nil {
 		*t = U16LE(buf[:2])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -114,6 +117,7 @@ func (r *Reader) U24BE(t *uint32) *Reader {
 	if r.err == nil {
 		*t = U24BE(buf[:3])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -145,6 +149,7 @@ func (r *Reader) U24LE(t *uint32) *Reader {
 	if r.err == nil {
 		*t = U24LE(buf[:3])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -176,6 +181,7 @@ func (r *Reader) U32BE(t *uint32) *Reader {
 	if r.err == nil {
 		*t = U32BE(buf[:4])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -207,6 +213,7 @@ func (r *Reader) U32LE(t *uint32) *Reader {
 	if r.err == nil {
 		*t = U32LE(buf[:4])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -238,6 +245,7 @@ func (r *Reader) U40BE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U40BE(buf[:5])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -269,6 +277,7 @@ func (r *Reader) U40LE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U40LE(buf[:5])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -300,6 +309,7 @@ func (r *Reader) U48BE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U48BE(buf[:6])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -331,6 +341,7 @@ func (r *Reader) U48LE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U48LE(buf[:6])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -362,6 +373,7 @@ func (r *Reader) U56BE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U56BE(buf[:7])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -393,6 +405,7 @@ func (r *Reader) U56LE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U56LE(buf[:7])
 	}
+	r.total += r.n
 
 	return r
 }
@@ -424,6 +437,7 @@ func (r *Reader) U64BE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U64BE(buf)
 	}
+	r.total += r.n
 
 	return r
 }
@@ -455,6 +469,7 @@ func (r *Reader) U64LE(t *uint64) *Reader {
 	if r.err == nil {
 		*t = U64LE(buf)
 	}
+	r.total += r.n
 
 	return r
 }

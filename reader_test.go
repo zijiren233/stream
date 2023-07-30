@@ -191,9 +191,8 @@ func TestReadSeeker(t *testing.T) {
 	}
 
 	// Seek back to the beginning
-	r.Seek(0, 0)
+	r.Seek(0, 0).I32LE(&i)
 
-	r.I32LE(&i)
 	if i != 0x6c6c6568 {
 		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
 	}

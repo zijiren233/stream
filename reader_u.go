@@ -11,15 +11,9 @@ func (r *Reader) U8(t *uint8) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:1])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:1])
 	if r.err == nil {
-		*t = U8(buf[0])
+		*t = U8(r.buf[0])
 	}
 	r.total += r.n
 
@@ -43,15 +37,9 @@ func (r *Reader) U16BE(t *uint16) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:2])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
-		*t = U16BE(buf[:2])
+		*t = U16BE(r.buf[:2])
 	}
 	r.total += r.n
 
@@ -75,15 +63,9 @@ func (r *Reader) U16LE(t *uint16) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:2])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
-		*t = U16LE(buf[:2])
+		*t = U16LE(r.buf[:2])
 	}
 	r.total += r.n
 
@@ -107,15 +89,9 @@ func (r *Reader) U24BE(t *uint32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:3])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
-		*t = U24BE(buf[:3])
+		*t = U24BE(r.buf[:3])
 	}
 	r.total += r.n
 
@@ -139,15 +115,9 @@ func (r *Reader) U24LE(t *uint32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:3])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
-		*t = U24LE(buf[:3])
+		*t = U24LE(r.buf[:3])
 	}
 	r.total += r.n
 
@@ -171,15 +141,9 @@ func (r *Reader) U32BE(t *uint32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:4])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
-		*t = U32BE(buf[:4])
+		*t = U32BE(r.buf[:4])
 	}
 	r.total += r.n
 
@@ -203,15 +167,9 @@ func (r *Reader) U32LE(t *uint32) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:4])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
-		*t = U32LE(buf[:4])
+		*t = U32LE(r.buf[:4])
 	}
 	r.total += r.n
 
@@ -235,15 +193,9 @@ func (r *Reader) U40BE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:5])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
-		*t = U40BE(buf[:5])
+		*t = U40BE(r.buf[:5])
 	}
 	r.total += r.n
 
@@ -267,15 +219,9 @@ func (r *Reader) U40LE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:5])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
-		*t = U40LE(buf[:5])
+		*t = U40LE(r.buf[:5])
 	}
 	r.total += r.n
 
@@ -299,15 +245,9 @@ func (r *Reader) U48BE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:6])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
-		*t = U48BE(buf[:6])
+		*t = U48BE(r.buf[:6])
 	}
 	r.total += r.n
 
@@ -331,15 +271,9 @@ func (r *Reader) U48LE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:6])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
-		*t = U48LE(buf[:6])
+		*t = U48LE(r.buf[:6])
 	}
 	r.total += r.n
 
@@ -363,15 +297,9 @@ func (r *Reader) U56BE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:7])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
-		*t = U56BE(buf[:7])
+		*t = U56BE(r.buf[:7])
 	}
 	r.total += r.n
 
@@ -395,15 +323,9 @@ func (r *Reader) U56LE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf[:7])
+	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
-		*t = U56LE(buf[:7])
+		*t = U56LE(r.buf[:7])
 	}
 	r.total += r.n
 
@@ -427,15 +349,9 @@ func (r *Reader) U64BE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf)
+	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
-		*t = U64BE(buf)
+		*t = U64BE(r.buf)
 	}
 	r.total += r.n
 
@@ -459,15 +375,9 @@ func (r *Reader) U64LE(t *uint64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = io.ReadFull(r.r, buf)
+	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
-		*t = U64LE(buf)
+		*t = U64LE(r.buf)
 	}
 	r.total += r.n
 

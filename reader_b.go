@@ -7,15 +7,9 @@ func (r *Reader) Bool(t *bool) *Reader {
 	if r.err != nil {
 		return r
 	}
-	if r.closed {
-		r.err = ErrAlreadyClosed
-		return r
-	}
-	buf := *bufBytesPool.Get().(*[]byte)
-	defer bufBytesPool.Put(&buf)
-	r.n, r.err = r.r.Read(buf[:1])
+	r.n, r.err = r.r.Read(r.buf[:1])
 	if r.err == nil {
-		*t = Bool(buf[:1])
+		*t = Bool(r.buf[:1])
 	}
 	r.total += r.n
 

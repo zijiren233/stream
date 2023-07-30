@@ -179,3 +179,22 @@ func TestReaderI32LE(t *testing.T) {
 		t.Errorf("expected EOF, got %v", r.Error())
 	}
 }
+
+func TestReadSeeker(t *testing.T) {
+	buf := bytes.NewReader([]byte("hello world"))
+	r := NewReadSeeker(buf)
+
+	var i int32
+	r.I32LE(&i)
+	if i != 0x6c6c6568 {
+		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
+	}
+
+	// Seek back to the beginning
+	r.Seek(0, 0)
+
+	r.I32LE(&i)
+	if i != 0x6c6c6568 {
+		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
+	}
+}

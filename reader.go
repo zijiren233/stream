@@ -13,10 +13,6 @@ type Reader struct {
 }
 
 func NewReader(r io.Reader) *Reader {
-	reader := new(Reader)
-
-	reader.r = r
-
 	return &Reader{
 		r:   r,
 		buf: make([]byte, 8),

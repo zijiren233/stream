@@ -444,3 +444,14 @@ func (w *Writer) Bool(s bool) *Writer {
 
 	return w
 }
+
+func (w *Writer) String(s string) *Writer {
+	if w.err != nil {
+		return w
+	}
+
+	w.n, w.err = w.w.Write(StringToBytes(s))
+	w.total += w.n
+
+	return w
+}

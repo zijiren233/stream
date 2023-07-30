@@ -206,3 +206,8 @@ func (r *ReadSeeker) U8(t *uint8) *ReadSeeker {
 	r.Reader.U8(t)
 	return r
 }
+
+func (r *ReadSeeker) String(t *string, n int) *ReadSeeker {
+	r.Reader.String(t, n)
+	return r
+}

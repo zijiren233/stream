@@ -141,3 +141,7 @@ func ReadF64LE(s []byte) float64 {
 func ReadBool(s []byte) bool {
 	return s[0] != 0
 }
+
+func ReadString(s []byte) string {
+	return string(s)
+}

@@ -197,3 +197,14 @@ func TestReadSeeker(t *testing.T) {
 		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
 	}
 }
+
+func TestReadString(t *testing.T) {
+	buf := bytes.NewReader([]byte("hello world"))
+	r := NewReader(buf)
+
+	var s string
+	r.String(&s, buf.Len())
+	if s != "hello world" {
+		t.Errorf("expected 'hello world', got '%s'", s)
+	}
+}

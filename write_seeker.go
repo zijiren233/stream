@@ -201,3 +201,8 @@ func (w *WriteSeeker) U8(t uint8) *WriteSeeker {
 	w.Writer.U8(t)
 	return w
 }
+
+func (w *WriteSeeker) String(t string) *WriteSeeker {
+	w.Writer.String(t)
+	return w
+}

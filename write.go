@@ -2,47 +2,47 @@ package stream
 
 import "math"
 
-func PutI8(buf []byte, v int8) {
+func WriteI8(buf []byte, v int8) {
 	buf[0] = byte(v)
 }
 
-func PutI16BE(buf []byte, v int16) {
+func WriteI16BE(buf []byte, v int16) {
 	buf[0] = byte(v >> 8)
 	buf[1] = byte(v)
 }
 
-func PutI16LE(buf []byte, v int16) {
+func WriteI16LE(buf []byte, v int16) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 }
 
-func PutI24BE(buf []byte, v int32) {
+func WriteI24BE(buf []byte, v int32) {
 	buf[0] = byte(v >> 16)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v)
 }
 
-func PutI24LE(buf []byte, v int32) {
+func WriteI24LE(buf []byte, v int32) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
 }
 
-func PutI32BE(buf []byte, v int32) {
+func WriteI32BE(buf []byte, v int32) {
 	buf[0] = byte(v >> 24)
 	buf[1] = byte(v >> 16)
 	buf[2] = byte(v >> 8)
 	buf[3] = byte(v)
 }
 
-func PutI32LE(buf []byte, v int32) {
+func WriteI32LE(buf []byte, v int32) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
 	buf[3] = byte(v >> 24)
 }
 
-func PutI40BE(buf []byte, v int64) {
+func WriteI40BE(buf []byte, v int64) {
 	buf[0] = byte(v >> 32)
 	buf[1] = byte(v >> 24)
 	buf[2] = byte(v >> 16)
@@ -50,7 +50,7 @@ func PutI40BE(buf []byte, v int64) {
 	buf[4] = byte(v)
 }
 
-func PutI40LE(buf []byte, v int64) {
+func WriteI40LE(buf []byte, v int64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -58,7 +58,7 @@ func PutI40LE(buf []byte, v int64) {
 	buf[4] = byte(v >> 32)
 }
 
-func PutI48BE(buf []byte, v int64) {
+func WriteI48BE(buf []byte, v int64) {
 	buf[0] = byte(v >> 40)
 	buf[1] = byte(v >> 32)
 	buf[2] = byte(v >> 24)
@@ -67,7 +67,7 @@ func PutI48BE(buf []byte, v int64) {
 	buf[5] = byte(v)
 }
 
-func PutI48LE(buf []byte, v int64) {
+func WriteI48LE(buf []byte, v int64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -76,7 +76,7 @@ func PutI48LE(buf []byte, v int64) {
 	buf[5] = byte(v >> 40)
 }
 
-func PutI56BE(buf []byte, v int64) {
+func WriteI56BE(buf []byte, v int64) {
 	buf[0] = byte(v >> 48)
 	buf[1] = byte(v >> 40)
 	buf[2] = byte(v >> 32)
@@ -86,7 +86,7 @@ func PutI56BE(buf []byte, v int64) {
 	buf[6] = byte(v)
 }
 
-func PutI56LE(buf []byte, v int64) {
+func WriteI56LE(buf []byte, v int64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -96,7 +96,7 @@ func PutI56LE(buf []byte, v int64) {
 	buf[6] = byte(v >> 48)
 }
 
-func PutI64BE(buf []byte, v int64) {
+func WriteI64BE(buf []byte, v int64) {
 	buf[0] = byte(v >> 56)
 	buf[1] = byte(v >> 48)
 	buf[2] = byte(v >> 40)
@@ -107,7 +107,7 @@ func PutI64BE(buf []byte, v int64) {
 	buf[7] = byte(v)
 }
 
-func PutI64LE(buf []byte, v int64) {
+func WriteI64LE(buf []byte, v int64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -118,47 +118,47 @@ func PutI64LE(buf []byte, v int64) {
 	buf[7] = byte(v >> 56)
 }
 
-func PutU8(buf []byte, v uint8) {
+func WriteU8(buf []byte, v uint8) {
 	buf[0] = byte(v)
 }
 
-func PutU16BE(buf []byte, v uint16) {
+func WriteU16BE(buf []byte, v uint16) {
 	buf[0] = byte(v >> 8)
 	buf[1] = byte(v)
 }
 
-func PutU16LE(buf []byte, v uint16) {
+func WriteU16LE(buf []byte, v uint16) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 }
 
-func PutU24BE(buf []byte, v uint32) {
+func WriteU24BE(buf []byte, v uint32) {
 	buf[0] = byte(v >> 16)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v)
 }
 
-func PutU24LE(buf []byte, v uint32) {
+func WriteU24LE(buf []byte, v uint32) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
 }
 
-func PutU32BE(buf []byte, v uint32) {
+func WriteU32BE(buf []byte, v uint32) {
 	buf[0] = byte(v >> 24)
 	buf[1] = byte(v >> 16)
 	buf[2] = byte(v >> 8)
 	buf[3] = byte(v)
 }
 
-func PutU32LE(buf []byte, v uint32) {
+func WriteU32LE(buf []byte, v uint32) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
 	buf[3] = byte(v >> 24)
 }
 
-func PutU40BE(buf []byte, v uint64) {
+func WriteU40BE(buf []byte, v uint64) {
 	buf[0] = byte(v >> 32)
 	buf[1] = byte(v >> 24)
 	buf[2] = byte(v >> 16)
@@ -166,7 +166,7 @@ func PutU40BE(buf []byte, v uint64) {
 	buf[4] = byte(v)
 }
 
-func PutU40LE(buf []byte, v uint64) {
+func WriteU40LE(buf []byte, v uint64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -174,7 +174,7 @@ func PutU40LE(buf []byte, v uint64) {
 	buf[4] = byte(v >> 32)
 }
 
-func PutU48BE(buf []byte, v uint64) {
+func WriteU48BE(buf []byte, v uint64) {
 	buf[0] = byte(v >> 40)
 	buf[1] = byte(v >> 32)
 	buf[2] = byte(v >> 24)
@@ -183,7 +183,7 @@ func PutU48BE(buf []byte, v uint64) {
 	buf[5] = byte(v)
 }
 
-func PutU48LE(buf []byte, v uint64) {
+func WriteU48LE(buf []byte, v uint64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -192,7 +192,7 @@ func PutU48LE(buf []byte, v uint64) {
 	buf[5] = byte(v >> 40)
 }
 
-func PutU56BE(buf []byte, v uint64) {
+func WriteU56BE(buf []byte, v uint64) {
 	buf[0] = byte(v >> 48)
 	buf[1] = byte(v >> 40)
 	buf[2] = byte(v >> 32)
@@ -202,7 +202,7 @@ func PutU56BE(buf []byte, v uint64) {
 	buf[6] = byte(v)
 }
 
-func PutU56LE(buf []byte, v uint64) {
+func WriteU56LE(buf []byte, v uint64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -212,7 +212,7 @@ func PutU56LE(buf []byte, v uint64) {
 	buf[6] = byte(v >> 48)
 }
 
-func PutU64BE(buf []byte, v uint64) {
+func WriteU64BE(buf []byte, v uint64) {
 	buf[0] = byte(v >> 56)
 	buf[1] = byte(v >> 48)
 	buf[2] = byte(v >> 40)
@@ -223,7 +223,7 @@ func PutU64BE(buf []byte, v uint64) {
 	buf[7] = byte(v)
 }
 
-func PutU64LE(buf []byte, v uint64) {
+func WriteU64LE(buf []byte, v uint64) {
 	buf[0] = byte(v)
 	buf[1] = byte(v >> 8)
 	buf[2] = byte(v >> 16)
@@ -234,23 +234,23 @@ func PutU64LE(buf []byte, v uint64) {
 	buf[7] = byte(v >> 56)
 }
 
-func PutF32BE(buf []byte, v float32) {
-	PutU32BE(buf, math.Float32bits(v))
+func WriteF32BE(buf []byte, v float32) {
+	WriteU32BE(buf, math.Float32bits(v))
 }
 
-func PutF32LE(buf []byte, v float32) {
-	PutU32LE(buf, math.Float32bits(v))
+func WriteF32LE(buf []byte, v float32) {
+	WriteU32LE(buf, math.Float32bits(v))
 }
 
-func PutF64BE(buf []byte, v float64) {
-	PutU64BE(buf, math.Float64bits(v))
+func WriteF64BE(buf []byte, v float64) {
+	WriteU64BE(buf, math.Float64bits(v))
 }
 
-func PutF64LE(buf []byte, v float64) {
-	PutU64LE(buf, math.Float64bits(v))
+func WriteF64LE(buf []byte, v float64) {
+	WriteU64LE(buf, math.Float64bits(v))
 }
 
-func PutBool(buf []byte, v bool) {
+func WriteBool(buf []byte, v bool) {
 	if v {
 		buf[0] = 1
 	} else {

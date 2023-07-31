@@ -13,3 +13,10 @@ func StringToBytes(s string) []byte {
 func BytesToString(b []byte) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
+
+// BitToU8(0b10010110, 0, 3) == 0b00000110
+func BitToU8(b byte, startBit int8, endBit int8) uint8 {
+	b <<= 7 - endBit
+	b >>= 7 - endBit + startBit
+	return b
+}

@@ -124,6 +124,9 @@ func (r *Reader) Read(data any) *Reader {
 					if r.Read(field.Addr().Interface()).err != nil {
 						break
 					}
+				} else {
+					r.err = FormatUnsupportedTypeError(field.Type().String())
+					break
 				}
 			}
 		} else {

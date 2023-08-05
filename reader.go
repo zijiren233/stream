@@ -195,7 +195,7 @@ func (r *Reader) I8(t *int8) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:1])
 	if r.err == nil {
-		*t = ReadI8(r.buf[:1])
+		*t = ReadI8(r.buf[0])
 	}
 	r.total += r.n
 
@@ -216,9 +216,9 @@ func (r *Reader) I16(t *int16) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI16BE(r.buf[:2])
+			*t = readI16BE(r.buf[:2])
 		} else {
-			*t = ReadI16LE(r.buf[:2])
+			*t = readI16LE(r.buf[:2])
 		}
 	}
 	r.total += r.n
@@ -240,9 +240,9 @@ func (r *Reader) I24(t *int32) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI24BE(r.buf[:3])
+			*t = readI24BE(r.buf[:3])
 		} else {
-			*t = ReadI24LE(r.buf[:3])
+			*t = readI24LE(r.buf[:3])
 		}
 	}
 	r.total += r.n
@@ -264,9 +264,9 @@ func (r *Reader) I32(t *int32) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI32BE(r.buf[:4])
+			*t = readI32BE(r.buf[:4])
 		} else {
-			*t = ReadI32LE(r.buf[:4])
+			*t = readI32LE(r.buf[:4])
 		}
 	}
 	r.total += r.n
@@ -288,9 +288,9 @@ func (r *Reader) I40(t *int64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI40BE(r.buf[:5])
+			*t = readI40BE(r.buf[:5])
 		} else {
-			*t = ReadI40LE(r.buf[:5])
+			*t = readI40LE(r.buf[:5])
 		}
 	}
 	r.total += r.n
@@ -312,9 +312,9 @@ func (r *Reader) I48(t *int64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI48BE(r.buf[:6])
+			*t = readI48BE(r.buf[:6])
 		} else {
-			*t = ReadI48LE(r.buf[:6])
+			*t = readI48LE(r.buf[:6])
 		}
 	}
 	r.total += r.n
@@ -336,9 +336,9 @@ func (r *Reader) I56(t *int64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI56BE(r.buf[:7])
+			*t = readI56BE(r.buf[:7])
 		} else {
-			*t = ReadI56LE(r.buf[:7])
+			*t = readI56LE(r.buf[:7])
 		}
 	}
 	r.total += r.n
@@ -360,9 +360,9 @@ func (r *Reader) I64(t *int64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadI64BE(r.buf)
+			*t = readI64BE(r.buf)
 		} else {
-			*t = ReadI64LE(r.buf)
+			*t = readI64LE(r.buf)
 		}
 	}
 	r.total += r.n
@@ -383,7 +383,7 @@ func (r *Reader) U8(t *uint8) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:1])
 	if r.err == nil {
-		*t = ReadU8(r.buf[:1])
+		*t = ReadU8(r.buf[0])
 	}
 	r.total += r.n
 
@@ -404,9 +404,9 @@ func (r *Reader) U16(t *uint16) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU16BE(r.buf[:2])
+			*t = readU16BE(r.buf[:2])
 		} else {
-			*t = ReadU16LE(r.buf[:2])
+			*t = readU16LE(r.buf[:2])
 		}
 	}
 	r.total += r.n
@@ -428,9 +428,9 @@ func (r *Reader) U24(t *uint32) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU24BE(r.buf[:3])
+			*t = readU24BE(r.buf[:3])
 		} else {
-			*t = ReadU24LE(r.buf[:3])
+			*t = readU24LE(r.buf[:3])
 		}
 	}
 	r.total += r.n
@@ -452,9 +452,9 @@ func (r *Reader) U32(t *uint32) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU32BE(r.buf[:4])
+			*t = readU32BE(r.buf[:4])
 		} else {
-			*t = ReadU32LE(r.buf[:4])
+			*t = readU32LE(r.buf[:4])
 		}
 	}
 	r.total += r.n
@@ -476,9 +476,9 @@ func (r *Reader) U40(t *uint64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU40BE(r.buf[:5])
+			*t = readU40BE(r.buf[:5])
 		} else {
-			*t = ReadU40LE(r.buf[:5])
+			*t = readU40LE(r.buf[:5])
 		}
 	}
 	r.total += r.n
@@ -500,9 +500,9 @@ func (r *Reader) U48(t *uint64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU48BE(r.buf[:6])
+			*t = readU48BE(r.buf[:6])
 		} else {
-			*t = ReadU48LE(r.buf[:6])
+			*t = readU48LE(r.buf[:6])
 		}
 	}
 	r.total += r.n
@@ -524,9 +524,9 @@ func (r *Reader) U56(t *uint64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU56BE(r.buf[:7])
+			*t = readU56BE(r.buf[:7])
 		} else {
-			*t = ReadU56LE(r.buf[:7])
+			*t = readU56LE(r.buf[:7])
 		}
 	}
 	r.total += r.n
@@ -548,9 +548,9 @@ func (r *Reader) U64(t *uint64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadU64BE(r.buf)
+			*t = readU64BE(r.buf)
 		} else {
-			*t = ReadU64LE(r.buf)
+			*t = readU64LE(r.buf)
 		}
 	}
 	r.total += r.n
@@ -572,9 +572,9 @@ func (r *Reader) F32(t *float32) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadF32BE(r.buf[:4])
+			*t = readF32BE(r.buf[:4])
 		} else {
-			*t = ReadF32LE(r.buf[:4])
+			*t = readF32LE(r.buf[:4])
 		}
 	}
 	r.total += r.n
@@ -596,9 +596,9 @@ func (r *Reader) F64(t *float64) *Reader {
 	r.n, r.err = io.ReadFull(r.r, r.buf[:8])
 	if r.err == nil {
 		if r.o == BigEndian {
-			*t = ReadF64BE(r.buf[:8])
+			*t = readF64BE(r.buf[:8])
 		} else {
-			*t = ReadF64LE(r.buf[:8])
+			*t = readF64LE(r.buf[:8])
 		}
 	}
 	r.total += r.n
@@ -619,7 +619,7 @@ func (r *Reader) Bool(t *bool) *Reader {
 	}
 	r.n, r.err = r.r.Read(r.buf[:1])
 	if r.err == nil {
-		*t = ReadBool(r.buf[:1])
+		*t = ReadBool(r.buf[0])
 	}
 	r.total += r.n
 

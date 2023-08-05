@@ -189,7 +189,7 @@ func (w *Writer) I8(s int8) *Writer {
 	if w.err != nil {
 		return w
 	}
-	WriteI8(w.buf[:1], s)
+	WriteI8(&w.buf[0], s)
 	w.n, w.err = w.w.Write(w.buf[:1])
 	w.total += w.n
 
@@ -201,9 +201,9 @@ func (w *Writer) I16(s int16) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI16BE(w.buf[:2], s)
+		writeI16BE(w.buf[:2], s)
 	} else {
-		WriteI16LE(w.buf[:2], s)
+		writeI16LE(w.buf[:2], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:2])
 	w.total += w.n
@@ -216,9 +216,9 @@ func (w *Writer) I24(s int32) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI24BE(w.buf[:3], s)
+		writeI24BE(w.buf[:3], s)
 	} else {
-		WriteI24LE(w.buf[:3], s)
+		writeI24LE(w.buf[:3], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:3])
 	w.total += w.n
@@ -231,9 +231,9 @@ func (w *Writer) I32(s int32) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI32BE(w.buf[:4], s)
+		writeI32BE(w.buf[:4], s)
 	} else {
-		WriteI32LE(w.buf[:4], s)
+		writeI32LE(w.buf[:4], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:4])
 	w.total += w.n
@@ -246,9 +246,9 @@ func (w *Writer) I40(s int64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI40BE(w.buf[:5], s)
+		writeI40BE(w.buf[:5], s)
 	} else {
-		WriteI40LE(w.buf[:5], s)
+		writeI40LE(w.buf[:5], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:5])
 	w.total += w.n
@@ -261,9 +261,9 @@ func (w *Writer) I48(s int64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI48BE(w.buf[:6], s)
+		writeI48BE(w.buf[:6], s)
 	} else {
-		WriteI48LE(w.buf[:6], s)
+		writeI48LE(w.buf[:6], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:6])
 	w.total += w.n
@@ -276,9 +276,9 @@ func (w *Writer) I56(s int64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI56BE(w.buf[:7], s)
+		writeI56BE(w.buf[:7], s)
 	} else {
-		WriteI56LE(w.buf[:7], s)
+		writeI56LE(w.buf[:7], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:7])
 	w.total += w.n
@@ -291,9 +291,9 @@ func (w *Writer) I64(s int64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteI64BE(w.buf[:8], s)
+		writeI64BE(w.buf[:8], s)
 	} else {
-		WriteI64LE(w.buf[:8], s)
+		writeI64LE(w.buf[:8], s)
 	}
 	w.n, w.err = w.w.Write(w.buf)
 	w.total += w.n
@@ -305,7 +305,7 @@ func (w *Writer) U8(s uint8) *Writer {
 	if w.err != nil {
 		return w
 	}
-	WriteU8(w.buf[:1], s)
+	WriteU8(&w.buf[0], s)
 	w.n, w.err = w.w.Write(w.buf[:1])
 	w.total += w.n
 
@@ -317,9 +317,9 @@ func (w *Writer) U16(s uint16) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU16BE(w.buf[:2], s)
+		writeU16BE(w.buf[:2], s)
 	} else {
-		WriteU16LE(w.buf[:2], s)
+		writeU16LE(w.buf[:2], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:2])
 	w.total += w.n
@@ -332,9 +332,9 @@ func (w *Writer) U24(s uint32) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU24BE(w.buf[:3], s)
+		writeU24BE(w.buf[:3], s)
 	} else {
-		WriteU24LE(w.buf[:3], s)
+		writeU24LE(w.buf[:3], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:3])
 	w.total += w.n
@@ -347,9 +347,9 @@ func (w *Writer) U32(s uint32) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU32BE(w.buf[:4], s)
+		writeU32BE(w.buf[:4], s)
 	} else {
-		WriteU32LE(w.buf[:4], s)
+		writeU32LE(w.buf[:4], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:4])
 	w.total += w.n
@@ -362,9 +362,9 @@ func (w *Writer) U40(s uint64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU40BE(w.buf[:5], s)
+		writeU40BE(w.buf[:5], s)
 	} else {
-		WriteU40LE(w.buf[:5], s)
+		writeU40LE(w.buf[:5], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:5])
 	w.total += w.n
@@ -377,9 +377,9 @@ func (w *Writer) U48(s uint64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU48BE(w.buf[:6], s)
+		writeU48BE(w.buf[:6], s)
 	} else {
-		WriteU48LE(w.buf[:6], s)
+		writeU48LE(w.buf[:6], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:6])
 	w.total += w.n
@@ -392,9 +392,9 @@ func (w *Writer) U56(s uint64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU56BE(w.buf[:7], s)
+		writeU56BE(w.buf[:7], s)
 	} else {
-		WriteU56LE(w.buf[:7], s)
+		writeU56LE(w.buf[:7], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:7])
 	w.total += w.n
@@ -407,9 +407,9 @@ func (w *Writer) U64(s uint64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteU64BE(w.buf[:8], s)
+		writeU64BE(w.buf[:8], s)
 	} else {
-		WriteU64LE(w.buf[:8], s)
+		writeU64LE(w.buf[:8], s)
 	}
 	w.n, w.err = w.w.Write(w.buf)
 	w.total += w.n
@@ -422,9 +422,9 @@ func (w *Writer) F32(s float32) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteF32BE(w.buf[:4], s)
+		writeF32BE(w.buf[:4], s)
 	} else {
-		WriteF32LE(w.buf[:4], s)
+		writeF32LE(w.buf[:4], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:4])
 	w.total += w.n
@@ -437,9 +437,9 @@ func (w *Writer) F64(s float64) *Writer {
 		return w
 	}
 	if w.o == BigEndian {
-		WriteF64BE(w.buf[:8], s)
+		writeF64BE(w.buf[:8], s)
 	} else {
-		WriteF64LE(w.buf[:8], s)
+		writeF64LE(w.buf[:8], s)
 	}
 	w.n, w.err = w.w.Write(w.buf[:8])
 	w.total += w.n
@@ -451,7 +451,7 @@ func (w *Writer) Bool(s bool) *Writer {
 	if w.err != nil {
 		return w
 	}
-	WriteBool(w.buf[:1], s)
+	WriteBool(&w.buf[0], s)
 	w.n, w.err = w.w.Write(w.buf[:1])
 	w.total += w.n
 

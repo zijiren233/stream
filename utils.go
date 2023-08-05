@@ -4,6 +4,13 @@ import (
 	"unsafe"
 )
 
+type Order int
+
+const (
+	BigEndian Order = iota
+	LittleEndian
+)
+
 // If string is readonly, modifying bytes will cause panic
 func StringToBytes(s string) []byte {
 	return *(*[]byte)(unsafe.Pointer(&s))

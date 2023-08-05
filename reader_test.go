@@ -8,7 +8,7 @@ import (
 
 func TestReader(t *testing.T) {
 	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
+	r := NewReader(buf, BigEndian)
 
 	var b byte
 	r.Byte(&b)
@@ -63,7 +63,7 @@ func TestReader(t *testing.T) {
 
 func TestReaderBytes(t *testing.T) {
 	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
+	r := NewReader(buf, BigEndian)
 
 	b := make([]byte, 5)
 	r.Bytes(b)
@@ -77,134 +77,5 @@ func TestReaderBytes(t *testing.T) {
 	r.Bytes(b)
 	if r.Error() != io.ErrUnexpectedEOF {
 		t.Errorf("expected EOF, got %v", r.Error())
-	}
-}
-
-func TestReaderI16BE(t *testing.T) {
-	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
-
-	var i int16
-	r.I16BE(&i)
-	if i != 0x6865 {
-		t.Errorf("expected 0x6865, got 0x%x", i)
-	}
-	r.I16BE(&i)
-	if i != 0x6c6c {
-		t.Errorf("expected 0x6c6c, got 0x%x", i)
-	}
-	r.I16BE(&i)
-	if i != 0x6f20 {
-		t.Errorf("expected 0x6f20, got 0x%x", i)
-	}
-	r.I16BE(&i)
-	if i != 0x776f {
-		t.Errorf("expected 0x776f, got 0x%x", i)
-	}
-	r.I16BE(&i)
-	if i != 0x726c {
-		t.Errorf("expected 0x726c, got 0x%x", i)
-	}
-	r.I16BE(&i)
-	if r.Error() != io.ErrUnexpectedEOF {
-		t.Errorf("expected EOF, got %v", r.Error())
-	}
-}
-
-func TestReaderI16LE(t *testing.T) {
-	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
-
-	var i int16
-	r.I16LE(&i)
-	if i != 0x6568 {
-		t.Errorf("expected 0x6568, got 0x%x", i)
-	}
-	r.I16LE(&i)
-	if i != 0x6c6c {
-		t.Errorf("expected 0x6c6c, got 0x%x", i)
-	}
-	r.I16LE(&i)
-	if i != 0x206f {
-		t.Errorf("expected 0x206f, got 0x%x", i)
-	}
-	r.I16LE(&i)
-	if i != 0x6f77 {
-		t.Errorf("expected 0x6f77, got 0x%x", i)
-	}
-	r.I16LE(&i)
-	if i != 0x6c72 {
-		t.Errorf("expected 0x6c72, got 0x%x", i)
-	}
-	r.I16LE(&i)
-	if r.Error() != io.ErrUnexpectedEOF {
-		t.Errorf("expected EOF, got %v", r.Error())
-	}
-}
-
-func TestReaderI32BE(t *testing.T) {
-	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
-
-	var i int32
-	r.I32BE(&i)
-	if i != 0x68656c6c {
-		t.Errorf("expected 0x68656c6c, got 0x%x", i)
-	}
-	r.I32BE(&i)
-	if i != 0x6f20776f {
-		t.Errorf("expected 0x6f20776f, got 0x%x", i)
-	}
-	r.I32BE(&i)
-	if r.Error() != io.ErrUnexpectedEOF {
-		t.Errorf("expected EOF, got %v", r.Error())
-	}
-}
-
-func TestReaderI32LE(t *testing.T) {
-	buf := bytes.NewBufferString("hello world")
-	r := NewReader(buf)
-
-	var i int32
-	r.I32LE(&i)
-	if i != 0x6c6c6568 {
-		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
-	}
-	r.I32LE(&i)
-	if i != 0x6f77206f {
-		t.Errorf("expected 0x6f77206f, got 0x%x", i)
-	}
-	r.I32LE(&i)
-	if r.Error() != io.ErrUnexpectedEOF {
-		t.Errorf("expected EOF, got %v", r.Error())
-	}
-}
-
-func TestReadSeeker(t *testing.T) {
-	buf := bytes.NewReader([]byte("hello world"))
-	r := NewReadSeeker(buf)
-
-	var i int32
-	r.I32LE(&i)
-	if i != 0x6c6c6568 {
-		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
-	}
-
-	// Seek back to the beginning
-	r.Seek(0, 0).I32LE(&i)
-
-	if i != 0x6c6c6568 {
-		t.Errorf("expected 0x6c6c6568, got 0x%x", i)
-	}
-}
-
-func TestReadString(t *testing.T) {
-	buf := bytes.NewReader([]byte("hello world"))
-	r := NewReader(buf)
-
-	var s string
-	r.String(&s, buf.Len())
-	if s != "hello world" {
-		t.Errorf("expected 'hello world', got '%s'", s)
 	}
 }

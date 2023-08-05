@@ -68,6 +68,42 @@ func TestWriteBE(t *testing.T) {
 	}
 }
 
+func TestWriteBE2(t *testing.T) {
+	buf := &bytes.Buffer{}
+	w := NewWriter(buf, BigEndian)
+
+	type test struct {
+		A int8
+		B int16
+		C int32
+		D []byte
+		E [16]byte
+		F []*test
+	}
+
+	w.Write(&test{111, 9999, 88888, make([]byte, 8), [16]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}, []*test{{111, 9999, 88888, make([]byte, 8), [16]byte{}, nil}}})
+
+	if w.Error() != nil {
+		t.Errorf("expected no error, got %v", w.Error())
+		return
+	}
+	if w.Total() != 62 || w.N() != 62 {
+		t.Errorf("expected 31 bytes, got %d", w.Total())
+		return
+	}
+
+	tmp := &test{
+		D: make([]byte, 8),
+		E: [16]byte{},
+		F: []*test{{}},
+	}
+	r := NewReader(buf, BigEndian)
+	if r.Read(tmp).Error() != nil {
+		t.Errorf("expected no error, got %v", r.Error())
+		return
+	}
+}
+
 func TestWriteLE(t *testing.T) {
 	buf := &bytes.Buffer{}
 	w := NewWriter(buf, LittleEndian)

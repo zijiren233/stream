@@ -50,95 +50,103 @@ func (w *Writer) Write(data any) *Writer {
 
 	preTotal := w.total
 
-	switch data := data.(type) {
+	switch dv := data.(type) {
 	case *bool:
-		w.Bool(*data)
+		w.Bool(*dv)
 	case bool:
-		w.Bool(data)
+		w.Bool(dv)
 	case []bool:
-		for i := range data {
-			w.Bool(data[i])
+		for i := range dv {
+			w.Bool(dv[i])
 		}
 	case *int8:
-		w.I8(*data)
+		w.I8(*dv)
 	case int8:
-		w.I8(data)
+		w.I8(dv)
 	case []int8:
-		for i := range data {
-			w.I8(data[i])
+		for i := range dv {
+			w.I8(dv[i])
 		}
 	case *uint8:
-		w.Byte(*data)
+		w.Byte(*dv)
 	case uint8:
-		w.Byte(data)
+		w.Byte(dv)
 	case []uint8:
-		w.Bytes(data)
+		w.Bytes(dv)
 	case *int16:
-		w.I16(*data)
+		w.I16(*dv)
 	case int16:
-		w.I16(data)
+		w.I16(dv)
 	case []int16:
-		for i := range data {
-			w.I16(data[i])
+		for i := range dv {
+			w.I16(dv[i])
 		}
 	case *uint16:
-		w.U16(*data)
+		w.U16(*dv)
 	case uint16:
-		w.U16(data)
+		w.U16(dv)
 	case []uint16:
-		for i := range data {
-			w.U16(data[i])
+		for i := range dv {
+			w.U16(dv[i])
 		}
 	case *int32:
-		w.I32(*data)
+		w.I32(*dv)
 	case int32:
-		w.I32(data)
+		w.I32(dv)
 	case []int32:
-		for i := range data {
-			w.I32(data[i])
+		for i := range dv {
+			w.I32(dv[i])
 		}
 	case *uint32:
-		w.U32(*data)
+		w.U32(*dv)
 	case uint32:
-		w.U32(data)
+		w.U32(dv)
 	case []uint32:
-		for i := range data {
-			w.U32(data[i])
+		for i := range dv {
+			w.U32(dv[i])
 		}
 	case *int64:
-		w.I64(*data)
+		w.I64(*dv)
 	case int64:
-		w.I64(data)
+		w.I64(dv)
 	case []int64:
-		for i := range data {
-			w.I64(data[i])
+		for i := range dv {
+			w.I64(dv[i])
 		}
 	case *uint64:
-		w.U64(*data)
+		w.U64(*dv)
 	case uint64:
-		w.U64(data)
+		w.U64(dv)
 	case []uint64:
-		for i := range data {
-			w.U64(data[i])
+		for i := range dv {
+			w.U64(dv[i])
 		}
 	case *float32:
-		w.F32(*data)
+		w.F32(*dv)
 	case float32:
-		w.F32(data)
+		w.F32(dv)
 	case []float32:
-		for i := range data {
-			w.F32(data[i])
+		for i := range dv {
+			w.F32(dv[i])
 		}
 	case *float64:
-		w.F64(*data)
+		w.F64(*dv)
 	case float64:
-		w.F64(data)
+		w.F64(dv)
 	case []float64:
-		for i := range data {
-			w.F64(data[i])
+		for i := range dv {
+			w.F64(dv[i])
 		}
 	default:
-		v := reflect.Indirect(reflect.ValueOf(data))
+		if v, ok := data.([]byte); ok {
+			w.Bytes(v)
+			break
+		}
+		v := reflect.Indirect(reflect.ValueOf(dv))
+		switch v.Kind() {
+		case reflect.Bool:
+			w.Bool(v.Bool())
+		}
 		if v.Kind() == reflect.Struct {
 			for i := 0; i < v.NumField(); i++ {
 				field := reflect.Indirect(v.Field(i))
@@ -152,6 +160,18 @@ func (w *Writer) Write(data any) *Writer {
 					}
 				} else {
 					w.err = FormatUnsupportedTypeError(field.Type().String())
+					break
+				}
+			}
+		} else if v.Kind() == reflect.Slice || v.Kind() == reflect.Array {
+			for i := 0; i < v.Len(); i++ {
+				elem := reflect.Indirect(v.Index(i))
+				if elem.CanInterface() {
+					if w.Write(elem.Interface()).err != nil {
+						break
+					}
+				} else {
+					w.err = FormatUnsupportedTypeError(elem.Type().String())
 					break
 				}
 			}

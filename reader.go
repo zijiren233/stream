@@ -77,6 +77,18 @@ func (r *Reader) ReadBytes(n int) (t []byte, err error) {
 	return
 }
 
+func (r *Reader) SkipBytes(n int) *Reader {
+	if r.err != nil {
+		return r
+	}
+	var tn int64
+	tn, r.err = io.CopyN(io.Discard, r.r, int64(n))
+	r.n = int(tn)
+	r.total += r.n
+
+	return r
+}
+
 func (r *Reader) I8(t *int8) *Reader {
 	if r.err != nil {
 		return r

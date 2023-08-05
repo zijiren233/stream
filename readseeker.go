@@ -37,6 +37,11 @@ func (r *ReadSeeker) Bytes(t []byte) *ReadSeeker {
 	return r
 }
 
+func (r *ReadSeeker) SkipBytes(n int) *ReadSeeker {
+	r.Reader.SkipBytes(n)
+	return r
+}
+
 func (r *ReadSeeker) F32BE(t *float32) *ReadSeeker {
 	r.Reader.F32BE(t)
 	return r

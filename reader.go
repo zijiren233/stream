@@ -6,7 +6,7 @@ import (
 )
 
 type Reader struct {
-	r     io.Reader
+	r     *BitReader
 	o     Order
 	n     int
 	total int
@@ -16,7 +16,7 @@ type Reader struct {
 
 func NewReader(r io.Reader, o Order) *Reader {
 	return &Reader{
-		r:   r,
+		r:   NewBitReader(r),
 		o:   o,
 		buf: make([]byte, 8),
 	}
@@ -155,6 +155,181 @@ func (r *Reader) Read(data any) *Reader {
 	return r
 }
 
+func (r *Reader) Bits(n int, s any) *Reader {
+	if r.err != nil {
+		return r
+	}
+
+	switch s := s.(type) {
+	case *bool:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 8 {
+			r.err = ErrLongLength(8)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = b[0] != 0
+		}
+	case *int8:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 8 {
+			r.err = ErrLongLength(8)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadI8(b[0])
+		}
+	case *uint8:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 8 {
+			r.err = ErrLongLength(8)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadU8(b[0])
+		}
+	case *int16:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 16 {
+			r.err = ErrLongLength(16)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadI16(b)
+		}
+	case *uint16:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 16 {
+			r.err = ErrLongLength(16)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadU16(b)
+		}
+	case *int32:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 32 {
+			r.err = ErrLongLength(32)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadI32(b)
+		}
+	case *uint32:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 32 {
+			r.err = ErrLongLength(32)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadU32(b)
+		}
+	case *int64:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 64 {
+			r.err = ErrLongLength(64)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadI64(b)
+		}
+	case *uint64:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 64 {
+			r.err = ErrLongLength(64)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, n, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadU64(b)
+		}
+	case *float32:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 32 {
+			r.err = ErrLongLength(32)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, 32, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadF32(b)
+		}
+	case *float64:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 64 {
+			r.err = ErrLongLength(64)
+		} else {
+			r.err = r.r.ReadBits(r.buf, 0, n)
+			b, err := BitsCut(r.buf, 0, 64, r.o)
+			if err != nil {
+				r.err = err
+				return r
+			}
+			*s = r.o.ReadF64(b)
+		}
+	case *string:
+		if n == 0 {
+			r.err = ErrShortLength(1)
+		} else if n > 32*1024 {
+			r.err = ErrLongLength(32 * 1024)
+		} else {
+			r.n, r.err = io.ReadFull(r.r, r.buf[:n])
+			*s = string(r.buf[:r.n])
+		}
+	default:
+		r.err = FormatUnsupportedTypeError(reflect.TypeOf(s).String())
+	}
+	return r
+}
+
 func (r *Reader) Byte(t *byte) *Reader {
 	if r.err != nil {
 		return r
@@ -211,7 +386,7 @@ func (r *Reader) I8(t *int8) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:1])
 	if r.err == nil {
-		*t = ReadI8(r.buf[0])
+		*t = r.o.ReadI8(r.buf[0])
 	}
 	r.total += r.n
 
@@ -231,11 +406,7 @@ func (r *Reader) I16(t *int16) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI16BE(r.buf[:2])
-		} else {
-			*t = readI16LE(r.buf[:2])
-		}
+		*t = r.o.ReadI16(r.buf[:2])
 	}
 	r.total += r.n
 
@@ -255,11 +426,7 @@ func (r *Reader) I24(t *int32) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI24BE(r.buf[:3])
-		} else {
-			*t = readI24LE(r.buf[:3])
-		}
+		*t = r.o.ReadI24(r.buf[:3])
 	}
 	r.total += r.n
 
@@ -279,11 +446,7 @@ func (r *Reader) I32(t *int32) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI32BE(r.buf[:4])
-		} else {
-			*t = readI32LE(r.buf[:4])
-		}
+		*t = r.o.ReadI32(r.buf[:4])
 	}
 	r.total += r.n
 
@@ -303,11 +466,7 @@ func (r *Reader) I40(t *int64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI40BE(r.buf[:5])
-		} else {
-			*t = readI40LE(r.buf[:5])
-		}
+		*t = r.o.ReadI40(r.buf[:5])
 	}
 	r.total += r.n
 
@@ -327,11 +486,7 @@ func (r *Reader) I48(t *int64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI48BE(r.buf[:6])
-		} else {
-			*t = readI48LE(r.buf[:6])
-		}
+		*t = r.o.ReadI48(r.buf[:6])
 	}
 	r.total += r.n
 
@@ -351,11 +506,7 @@ func (r *Reader) I56(t *int64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI56BE(r.buf[:7])
-		} else {
-			*t = readI56LE(r.buf[:7])
-		}
+		*t = r.o.ReadI56(r.buf[:7])
 	}
 	r.total += r.n
 
@@ -375,11 +526,7 @@ func (r *Reader) I64(t *int64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readI64BE(r.buf)
-		} else {
-			*t = readI64LE(r.buf)
-		}
+		*t = r.o.ReadI64(r.buf)
 	}
 	r.total += r.n
 
@@ -399,7 +546,7 @@ func (r *Reader) U8(t *uint8) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:1])
 	if r.err == nil {
-		*t = ReadU8(r.buf[0])
+		*t = r.o.ReadU8(r.buf[0])
 	}
 	r.total += r.n
 
@@ -419,11 +566,7 @@ func (r *Reader) U16(t *uint16) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:2])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU16BE(r.buf[:2])
-		} else {
-			*t = readU16LE(r.buf[:2])
-		}
+		*t = r.o.ReadU16(r.buf[:2])
 	}
 	r.total += r.n
 
@@ -443,11 +586,7 @@ func (r *Reader) U24(t *uint32) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:3])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU24BE(r.buf[:3])
-		} else {
-			*t = readU24LE(r.buf[:3])
-		}
+		*t = r.o.ReadU24(r.buf[:3])
 	}
 	r.total += r.n
 
@@ -467,11 +606,7 @@ func (r *Reader) U32(t *uint32) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU32BE(r.buf[:4])
-		} else {
-			*t = readU32LE(r.buf[:4])
-		}
+		*t = r.o.ReadU32(r.buf[:4])
 	}
 	r.total += r.n
 
@@ -491,11 +626,7 @@ func (r *Reader) U40(t *uint64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:5])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU40BE(r.buf[:5])
-		} else {
-			*t = readU40LE(r.buf[:5])
-		}
+		*t = r.o.ReadU40(r.buf[:5])
 	}
 	r.total += r.n
 
@@ -515,11 +646,7 @@ func (r *Reader) U48(t *uint64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:6])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU48BE(r.buf[:6])
-		} else {
-			*t = readU48LE(r.buf[:6])
-		}
+		*t = r.o.ReadU48(r.buf[:6])
 	}
 	r.total += r.n
 
@@ -539,11 +666,7 @@ func (r *Reader) U56(t *uint64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:7])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU56BE(r.buf[:7])
-		} else {
-			*t = readU56LE(r.buf[:7])
-		}
+		*t = r.o.ReadU56(r.buf[:7])
 	}
 	r.total += r.n
 
@@ -563,11 +686,7 @@ func (r *Reader) U64(t *uint64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf)
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readU64BE(r.buf)
-		} else {
-			*t = readU64LE(r.buf)
-		}
+		*t = r.o.ReadU64(r.buf)
 	}
 	r.total += r.n
 
@@ -587,11 +706,7 @@ func (r *Reader) F32(t *float32) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:4])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readF32BE(r.buf[:4])
-		} else {
-			*t = readF32LE(r.buf[:4])
-		}
+		*t = r.o.ReadF32(r.buf[:4])
 	}
 	r.total += r.n
 
@@ -611,11 +726,7 @@ func (r *Reader) F64(t *float64) *Reader {
 	}
 	r.n, r.err = io.ReadFull(r.r, r.buf[:8])
 	if r.err == nil {
-		if r.o == BigEndian {
-			*t = readF64BE(r.buf[:8])
-		} else {
-			*t = readF64LE(r.buf[:8])
-		}
+		*t = r.o.ReadF64(r.buf[:8])
 	}
 	r.total += r.n
 
@@ -635,7 +746,7 @@ func (r *Reader) Bool(t *bool) *Reader {
 	}
 	r.n, r.err = r.r.Read(r.buf[:1])
 	if r.err == nil {
-		*t = ReadBool(r.buf[0])
+		*t = r.o.ReadBool(r.buf[0])
 	}
 	r.total += r.n
 

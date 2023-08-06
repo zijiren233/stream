@@ -10,8 +10,14 @@ func (e FormatUnsupportedTypeError) Error() string {
 	return fmt.Sprintf("stream: unsupported type: %s", string(e))
 }
 
-type FormatLengthError uint8
+type ErrShortLength uint8
 
-func (e FormatLengthError) Error() string {
-	return fmt.Sprintf("stream: length must be %d", e)
+func (e ErrShortLength) Error() string {
+	return fmt.Sprintf("stream: length must more then %d", e)
+}
+
+type ErrLongLength uint
+
+func (e ErrLongLength) Error() string {
+	return fmt.Sprintf("stream: length must less then %d", e)
 }

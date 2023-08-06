@@ -79,3 +79,54 @@ func TestReaderBytes(t *testing.T) {
 		t.Errorf("expected EOF, got %v", r.Error())
 	}
 }
+
+func TestBits(t *testing.T) {
+	buf := bytes.NewReader([]byte{0b1101_1010})
+	rb := NewReader(buf, BigEndian)
+
+	var b bool
+	for k, v := range []bool{true, true, false, true, true, false, true, false} {
+		if rb.Bits(1, &b).Error() != nil {
+			t.Errorf("expected no error, got %v", rb.Error())
+		}
+		if b != v {
+			t.Errorf("expected %v, got %v at bit %d", v, b, k)
+		}
+	}
+
+	ru8 := NewReader(bytes.NewReader([]byte{12, 42, 13, 45, 34, 76, 84}), BigEndian)
+	var u8 uint8
+	for k, v := range []uint8{12, 42, 13, 45, 34, 76, 84} {
+		if ru8.Bits(8, &u8).Error() != nil {
+			t.Errorf("expected no error, got %v", ru8.Error())
+		}
+		if u8 != v {
+			t.Errorf("expected %v, got %v at bit %d", v, u8, k*8)
+		}
+	}
+
+}
+
+func TestBits2(t *testing.T) {
+	ru8 := NewReader(bytes.NewReader([]byte{12, 42, 13, 45, 34, 76, 84}), BigEndian)
+	for i, v := range []byte{12, 42, 13, 45, 34, 76, 84} {
+		for j := 0; j < 2; j++ {
+			var u8 uint8
+			if ru8.Bits(4, &u8).Error() != nil {
+				t.Errorf("expected no error, got %v", ru8.Error())
+				return
+			}
+			if j%2 == 0 {
+				if !bytes.Equal([]byte{v >> 4}, []byte{u8 & 0x0f}) {
+					t.Errorf("expected %08b, got %08b at bit %d", v>>4, u8&0x0f, i*4)
+					return
+				}
+			} else {
+				if !bytes.Equal([]byte{v & 0x0f}, []byte{u8}) {
+					t.Errorf("expected %08b, got %08b at bit %d", v&0x0f, u8, i*4)
+					return
+				}
+			}
+		}
+	}
+}

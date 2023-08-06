@@ -42,8 +42,8 @@ func (r *ReadSeeker) Bytes(t []byte) *ReadSeeker {
 	return r
 }
 
-func (r *ReadSeeker) SkipN(n int) *ReadSeeker {
-	r.Reader.SkipN(n)
+func (r *ReadSeeker) SkipBytes(n int64) *ReadSeeker {
+	r.Reader.SkipBytes(n)
 	return r
 }
 

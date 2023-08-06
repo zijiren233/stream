@@ -108,3 +108,31 @@ func (r *BitReader) Read(p []byte) (int, error) {
 	}
 	return n, nil
 }
+
+func (r *BitReader) SkipBytes(n int64) (int64, error) {
+	if r.pos >= 8 {
+		return io.CopyN(io.Discard, r.r, n)
+	}
+
+	for i := int64(0); i < n; i++ {
+		_, err := r.ReadByte()
+		if err != nil {
+			return i - 1, err
+		}
+	}
+	return n, nil
+}
+
+func (r *BitReader) SkipBits(n int64) (int64, error) {
+	if r.pos >= 8 && n%8 == 0 {
+		return io.CopyN(io.Discard, r.r, n/8)
+	}
+
+	for i := int64(0); i < n; i++ {
+		_, err := r.ReadBit()
+		if err != nil {
+			return i - 1, err
+		}
+	}
+	return n, nil
+}

@@ -368,14 +368,24 @@ func (r *Reader) ReadBytes(n int) (t []byte, err error) {
 	return
 }
 
-func (r *Reader) SkipN(n int) *Reader {
+// r.N() and r.Total() dont work with r.SkipBits() and r.SkipBytes()
+func (r *Reader) SkipBits(n int64) *Reader {
 	if r.err != nil {
 		return r
 	}
-	var tn int64
-	tn, r.err = io.CopyN(io.Discard, r.r, int64(n))
-	r.n = int(tn)
-	r.total += r.n
+	_, r.err = r.r.SkipBits(n)
+	r.n = 0
+
+	return r
+}
+
+// r.N() and r.Total() dont work with r.SkipBits() and r.SkipBytes()
+func (r *Reader) SkipBytes(n int64) *Reader {
+	if r.err != nil {
+		return r
+	}
+	_, r.err = r.r.SkipBytes(n)
+	r.n = 0
 
 	return r
 }

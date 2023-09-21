@@ -1,6 +1,7 @@
 package stream
 
 import (
+	"bytes"
 	"io"
 	"reflect"
 )
@@ -12,14 +13,20 @@ type Writer struct {
 	total int
 	err   error
 	buf   []byte
+
+	rf io.ReaderFrom
 }
 
 func NewWriter(w io.Writer, o Order) *Writer {
-	return &Writer{
+	writer := &Writer{
 		w:   w,
 		o:   o,
 		buf: make([]byte, 8),
 	}
+	if rf, ok := writer.w.(io.ReaderFrom); ok {
+		writer.rf = rf
+	}
+	return writer
 }
 
 func (w *Writer) Error() error {
@@ -195,14 +202,20 @@ func (w *Writer) Byte(s byte) *Writer {
 	return w
 }
 
-func (w *Writer) Bytes(s []byte) *Writer {
+func (w *Writer) ReadFrom(r io.Reader) *Writer {
 	if w.err != nil {
 		return w
 	}
-	w.n, w.err = w.w.Write(s)
+	var n int64
+	n, w.err = io.Copy(w.w, r)
+	w.n = int(n)
 	w.total += w.n
 
 	return w
+}
+
+func (w *Writer) Bytes(s []byte) *Writer {
+	return w.ReadFrom(bytes.NewReader(s))
 }
 
 func (w *Writer) I8(s int8) *Writer {

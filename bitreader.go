@@ -9,11 +9,17 @@ type (
 		r   io.Reader
 		buf [1]byte
 		pos int
+
+		rt io.WriterTo
 	}
 )
 
 func NewBitReader(r io.Reader) *BitReader {
-	return &BitReader{r: r, pos: 8}
+	reader := &BitReader{r: r, pos: 8}
+	if rt, ok := reader.r.(io.WriterTo); ok {
+		reader.rt = rt
+	}
+	return reader
 }
 
 // ReadBit reads a single bit from the stream.

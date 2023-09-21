@@ -140,3 +140,34 @@ func TestWriteLE(t *testing.T) {
 		return
 	}
 }
+
+func TestWriteBytes(t *testing.T) {
+	buf := &bytes.Buffer{}
+	w := NewWriter(buf, BigEndian)
+
+	w.Bytes([]byte{1, 2, 3, 4, 5, 6, 7, 8})
+
+	if w.Error() != nil {
+		t.Errorf("expected no error, got %v", w.Error())
+		return
+	}
+	if w.Total() != 8 || w.N() != 8 {
+		t.Errorf("expected 8 bytes, got %d", w.Total())
+		return
+	}
+	if bytes.Equal(buf.Bytes(), []byte{1, 2, 3, 4, 5, 6, 7, 8}) == false {
+		t.Errorf("expected [1 2 3 4 5 6 7 8], got %x", buf.Bytes())
+		return
+	}
+
+	tmp := make([]byte, 8)
+	r := NewReader(buf, BigEndian)
+	if r.Read(tmp).Error() != nil {
+		t.Errorf("expected no error, got %v", r.Error())
+		return
+	}
+	if r.Total() != 8 || r.N() != 8 {
+		t.Errorf("expected 8 bytes, got %d", r.Total())
+		return
+	}
+}

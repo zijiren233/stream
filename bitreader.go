@@ -4,15 +4,13 @@ import (
 	"io"
 )
 
-type (
-	BitReader struct {
-		r   io.Reader
-		buf [1]byte
-		pos int
+type BitReader struct {
+	r   io.Reader
+	buf [1]byte
+	pos int
 
-		rt io.WriterTo
-	}
-)
+	rt io.WriterTo
+}
 
 func NewBitReader(r io.Reader) *BitReader {
 	reader := &BitReader{r: r, pos: 8}

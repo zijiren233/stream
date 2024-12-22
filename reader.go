@@ -771,7 +771,7 @@ func (r *Reader) ReadBool() (t bool, err error) {
 }
 
 func (r *Reader) String(t *string, n int) *Reader {
-	var b = make([]byte, n)
+	b := make([]byte, n)
 	r.Bytes(b)
 	*t = BytesToString(b)
 

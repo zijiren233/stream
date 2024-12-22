@@ -104,7 +104,6 @@ func TestBits(t *testing.T) {
 			t.Errorf("expected %v, got %v at bit %d", v, u8, k*8)
 		}
 	}
-
 }
 
 func TestBits2(t *testing.T) {

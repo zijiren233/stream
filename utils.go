@@ -7,17 +7,12 @@ import (
 
 // The change of bytes will cause the change of string synchronously
 func BytesToString(b []byte) string {
-	return *(*string)(unsafe.Pointer(&b))
+	return unsafe.String(unsafe.SliceData(b), len(b))
 }
 
 // If string is readonly, modifying bytes will cause panic
 func StringToBytes(s string) []byte {
-	return *(*[]byte)(unsafe.Pointer(
-		&struct {
-			string
-			Cap int
-		}{s, len(s)},
-	))
+	return unsafe.Slice(unsafe.StringData(s), len(s))
 }
 
 // BitToU8(0b1001_0110, 0, 3) == 0b0000_0100

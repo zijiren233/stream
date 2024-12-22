@@ -31,7 +31,6 @@ func TestBitReader(t *testing.T) {
 			} else {
 				t.Fatal(err)
 			}
-
 		} else if !bytes.Equal(buf2, []byte{99 >> 1, byte(tmp)}) {
 			t.Fatalf("ReadBits returned the wrong value: %16b, need: %16b", buf2, []byte{99 >> 1, byte(tmp)})
 		}
